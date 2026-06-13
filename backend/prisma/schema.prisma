@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  groupMembers  GroupMember[]
+  expensesPaid  Expense[]      @relation("ExpensePayer")
+  expenseSplits ExpenseSplit[]
+  settlementsAsPayer Settlement[] @relation("SettlementPayer")
+  settlementsAsReceiver Settlement[] @relation("SettlementReceiver")
+  chatMessages  ChatMessage[]
+}
+
+model Group {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  members      GroupMember[]
+  expenses     Expense[]
+  settlements  Settlement[]
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+model GroupMember {
+  id       Int      @id @default(autoincrement())
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   Int
+  group    Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId  Int
+  role     Role     @default(MEMBER)
+  joinedAt DateTime @default(now())
+
+  @@unique([userId, groupId])
+}
+
+enum ExpenseType {
+  EQUAL
+  UNEQUAL
+  PERCENTAGE
+  SHARE
+}
+
+model Expense {
+  id          Int         @id @default(autoincrement())
+  group       Group       @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId     Int
+  paidBy      User        @relation("ExpensePayer", fields: [paidById], references: [id])
+  paidById    Int
+  amount      Float
+  description String
+  type        ExpenseType
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  splits   ExpenseSplit[]
+  messages ChatMessage[]
+}
+
+model ExpenseSplit {
+  id         Int      @id @default(autoincrement())
+  expense    Expense  @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+  expenseId  Int
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  amountOwed Float
+  percentage Float?
+  shares     Int?
+
+  @@unique([expenseId, userId])
+}
+
+model Settlement {
+  id         Int      @id @default(autoincrement())
+  group      Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId    Int
+  payer      User     @relation("SettlementPayer", fields: [payerId], references: [id])
+  payerId    Int
+  receiver   User     @relation("SettlementReceiver", fields: [receiverId], references: [id])
+  receiverId Int
+  amount     Float
+  createdAt  DateTime @default(now())
+}
+
+model ChatMessage {
+  id        Int      @id @default(autoincrement())
+  expense   Expense  @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+  expenseId Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  message   String
+  createdAt DateTime @default(now())
+}

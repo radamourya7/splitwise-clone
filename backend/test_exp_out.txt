@@ -1,0 +1,11 @@
+=== Expense Validation Tests ===
+1. EQUAL split creation: PASS
+2. UNEQUAL valid split: PASS
+3. UNEQUAL invalid split: PASS
+4. PERCENTAGE valid split: PASS
+5. PERCENTAGE invalid split: PASS
+6. SHARE valid split: PASS
+7. SHARE invalid split: PASS
+8. Edit expense: PASS
+9. Delete expense: PASS
+10. Unauthorized expense creation: PASS

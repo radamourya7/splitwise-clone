@@ -1,0 +1,10 @@
+=== Balances & Settlements Tests ===
+1. Expense creates balance: PASS
+2. Multiple expenses accumulate correctly: PASS
+3. Partial settlement: PASS
+4. Full settlement: PASS
+5. Over-settlement prevention: FAIL
+6. Group isolation verification: PASS
+7. Overall balance endpoint: PASS
+8. Unauthorized access: PASS
+9. Invalid settlement scenarios: PASS
