@@ -44,7 +44,7 @@ const Chat = () => {
 
     const setupSocket = () => {
         const token = localStorage.getItem('token');
-        const socket = io('http://localhost:5000', { auth: { token } });
+        const socket = io('https://splitwise-clone-8k94.onrender.com', { auth: { token } });
 
         socket.on('connect', () => {
             socket.emit('joinExpenseRoom', { expenseId });
