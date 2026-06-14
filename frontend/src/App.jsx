@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import GroupDetails from './pages/GroupDetails';
+import Chat from './pages/Chat';
 
 const Placeholder = ({ title }) => <div className="p-8 flex justify-center items-center h-screen bg-gray-50"><h1 className="text-3xl font-bold text-gray-400">{title} Component Placeholder</h1></div>;
 
@@ -17,6 +18,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/groups/:id" element={<ProtectedRoute><GroupDetails /></ProtectedRoute>} />
+          <Route path="/expenses/:id/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="*" element={<div className="p-8 text-center mt-20"><h1 className="text-4xl font-bold text-gray-800">404</h1><p className="text-gray-500 mt-2">Page not found</p></div>} />
         </Routes>

@@ -109,7 +109,6 @@ const GroupDetails = () => {
                         <div className="flex space-x-3">
                             <button onClick={() => setShowExpenseModal(true)} className="flex-1 sm:flex-none bg-orange-500 text-white px-4 py-2 rounded shadow hover:bg-orange-600 text-sm font-medium">Add Expense</button>
                             <button onClick={() => setShowSettlementModal(true)} className="flex-1 sm:flex-none bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 text-sm font-medium">Settle Up</button>
-                            <Link to={`/groups/${id}/chat`} className="flex-1 sm:flex-none bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 text-sm font-medium text-center">Chat</Link>
                         </div>
                     </div>
 
@@ -126,8 +125,9 @@ const GroupDetails = () => {
                                             <p className="font-semibold">{exp.description}</p>
                                             <p className="text-xs text-gray-500">{new Date(exp.createdAt).toLocaleDateString()} • Paid by {getUserName(exp.paidById)}</p>
                                         </div>
-                                        <div className="text-right">
+                                        <div className="text-right flex flex-col items-end gap-2">
                                             <p className="font-bold text-lg">₹{exp.amount}</p>
+                                            <Link to={`/expenses/${exp.id}/chat`} className="text-xs bg-blue-50 text-blue-600 font-medium px-2 py-1 rounded hover:bg-blue-100 transition-colors">Chat &rarr;</Link>
                                         </div>
                                     </div>
                                 ))}
