@@ -3,6 +3,10 @@ const express = require('express');
 const cors = require('cors');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
+const jwt = require('jsonwebtoken');
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+const chatHandler = require('./socket/chatHandler');
 
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -34,20 +38,22 @@ app.get('/api/health', (req, res) => {
 });
 
 // Real-time Chat Logic
+io.use(async (socket, next) => {
+  try {
+    const token = socket.handshake.auth.token;
+    if (!token) return next(new Error('Authentication error'));
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await prisma.user.findUnique({ where: { id: decoded.id } });
+    if (!user) return next(new Error('User not found'));
+    socket.user = user;
+    next();
+  } catch (e) {
+    next(new Error('Authentication error'));
+  }
+});
+
 io.on('connection', (socket) => {
-  console.log('A user connected:', socket.id);
-
-  socket.on('joinExpenseRoom', (expenseId) => {
-    socket.join(`expense_${expenseId}`);
-  });
-
-  socket.on('sendMessage', (payload) => {
-    io.to(`expense_${payload.expenseId}`).emit('receiveMessage', payload);
-  });
-
-  socket.on('disconnect', () => {
-    console.log('User disconnected:', socket.id);
-  });
+  chatHandler(io, socket);
 });
 
 const PORT = process.env.PORT || 5000;

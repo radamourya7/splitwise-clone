@@ -51,3 +51,13 @@ exports.deleteExpense = async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 };
+
+exports.getExpenseChat = async (req, res) => {
+    try {
+        const messages = await expenseService.getExpenseChat(req.user.id, req.params.id);
+        res.status(200).json(messages);
+    } catch (err) {
+        if (err.status) return res.status(err.status).json({ error: err.message });
+        res.status(500).json({ error: 'Server error' });
+    }
+};

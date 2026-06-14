@@ -1,0 +1,7 @@
+=== Socket.io Chat Tests ===
+7. Unauthorized socket rejection: PASS
+
+ERROR: Error: Timeout on event joinedRoom
+    at Timeout._onTimeout (D:\Spiltwise\backend\testChat.js:26:49)
+    at listOnTimeout (node:internal/timers:581:17)
+    at process.processTimers (node:internal/timers:519:7)

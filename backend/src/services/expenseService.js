@@ -175,6 +175,19 @@ const deleteExpense = async (userId, expenseId) => {
     });
 };
 
+const getExpenseChat = async (userId, expenseId) => {
+    expenseId = Number(expenseId);
+    const expense = await prisma.expense.findUnique({ where: { id: expenseId } });
+    if (!expense) throw { status: 404, message: 'Expense not found' };
+    await verifyGroupMember(userId, expense.groupId);
+
+    return await prisma.chatMessage.findMany({
+        where: { expenseId },
+        orderBy: { createdAt: 'asc' },
+        include: { user: { select: { id: true, name: true, email: true } } }
+    });
+};
+
 module.exports = {
-    createExpense, getGroupExpenses, getExpenseById, updateExpense, deleteExpense
+    createExpense, getGroupExpenses, getExpenseById, updateExpense, deleteExpense, getExpenseChat
 };
