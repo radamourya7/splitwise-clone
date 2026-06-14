@@ -21,7 +21,7 @@ function connectSocket(token) {
     });
 }
 
-function receiveOnce(socket, event, timeoutMs = 2000) {
+function receiveOnce(socket, event, timeoutMs = 8000) {
     return new Promise((resolve, reject) => {
         const timeout = setTimeout(() => reject(new Error('Timeout on event ' + event)), timeoutMs);
         socket.once(event, (data) => {

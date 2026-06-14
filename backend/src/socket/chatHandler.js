@@ -15,12 +15,16 @@ const verifyExpenseAccess = async (userId, expenseId) => {
 
 module.exports = (io, socket) => {
     socket.on('joinExpenseRoom', async (payload) => {
+        console.log(`[Socket] joinExpenseRoom received Payload:`, payload);
         try {
             const { expenseId } = payload;
+            console.log(`[Socket] Verification executing for User ${socket.user.id} Exp ${expenseId}`);
             await verifyExpenseAccess(socket.user.id, Number(expenseId));
             socket.join(`expense_${expenseId}`);
             socket.emit('joinedRoom', { expenseId });
+            console.log(`[Socket] Validation success. Room joined.`);
         } catch (err) {
+            console.log(`[Socket] Error thrown:`, err.message);
             socket.emit('error', err.message);
         }
     });

@@ -1,7 +1,8 @@
 === Socket.io Chat Tests ===
 7. Unauthorized socket rejection: PASS
-
-ERROR: Error: Timeout on event joinedRoom
-    at Timeout._onTimeout (D:\Spiltwise\backend\testChat.js:26:49)
-    at listOnTimeout (node:internal/timers:581:17)
-    at process.processTimers (node:internal/timers:519:7)
+8. Invalid expense rejection (join): PASS
+5. Room isolation (Hacker join): PASS
+3. Receive message sent broadcast: PASS
+4. Multiple users broadcast replies: PASS
+9. Empty message rejection: PASS
+6. Persistence verification (REST API): PASS
